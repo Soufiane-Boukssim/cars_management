@@ -1,0 +1,10 @@
+<odoo>
+
+    <!-- ACTION -->
+    <record id="action_car" model="ir.actions.act_window">
+        <field name="name">Cars</field>
+        <field name="res_model">cars.car</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

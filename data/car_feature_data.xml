@@ -1,0 +1,19 @@
+<odoo>
+
+    <record id="feature_sport" model="cars.car.feature">
+        <field name="name">Sport</field>
+    </record>
+
+    <record id="feature_luxury" model="cars.car.feature">
+        <field name="name">Luxury</field>
+    </record>
+
+    <record id="feature_offroad" model="cars.car.feature">
+        <field name="name">Off-road</field>
+    </record>
+
+    <record id="feature_autonomous" model="cars.car.feature">
+        <field name="name">Autonomous</field>
+    </record>
+
+</odoo>

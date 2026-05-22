@@ -1,0 +1,245 @@
+<odoo>
+
+    <!-- ===================== HOME PAGE ===================== -->
+    <template id="homepage_template">
+        <t t-call="website.layout">
+
+            <div class="container mt-5 text-center">
+                <h1>🚗 Welcome to Car Marketplace</h1>
+                <p>Buy cars easy</p>
+
+                <a href="/cars" class="btn btn-primary">
+                    Find Your Car
+                </a>
+            </div>
+
+            <div class="container mt-5">
+                <h2>🔥 Featured Cars</h2>
+
+                <div class="row">
+                    <t t-foreach="cars" t-as="car">
+                        <div class="col-md-4">
+                            <div class="card mb-3">
+
+                                <!-- IMAGE FIXED -->
+                                <img t-att-src="'/web/image/cars.car/' + str(car.id) + '/image'"
+                                     class="card-img-top"/>
+
+                                <div class="card-body">
+                                    <h5>
+                                        <a t-att-href="'/cars/' + str(car.id)">
+                                            <t t-esc="car.brand +' '+ car.name"/>
+                                        </a>
+                                    </h5>
+                                    <p><t t-esc="car.price"/> MAD</p>
+                                </div>
+
+                                <a t-att-href="'/contact?car_id=' + str(car.id)"
+                                   class="btn btn-success mt-3">
+                                    Interested
+                                </a>
+
+                            </div>
+                        </div>
+                    </t>
+                </div>
+
+            </div>
+
+        </t>
+    </template>
+
+    <!-- ===================== LIST PAGE ===================== -->
+    <template id="car_list_template" name="Car List">
+        <t t-call="website.layout">
+
+            <div class="container mt-4">
+                <div class="row">
+
+                    <!-- ✅ FILTER LEFT -->
+                    <div class="col-md-3">
+                        <form method="get" action="/cars" class="mb-4">
+
+                            <h5>Filter</h5>
+
+                            <!-- Brand -->
+                            <div class="mb-3">
+                                <input type="text" name="brand" class="form-control"
+                                    placeholder="Search by brand"
+                                    t-att-value="request.params.get('brand')"/>
+                            </div>
+
+                            <!-- Name -->
+                            <div class="mb-3">
+                                <input type="text" name="name" class="form-control"
+                                    placeholder="Search by name"
+                                    t-att-value="request.params.get('name')"/>
+                            </div>
+
+                            <!-- Max Price -->
+                            <div class="mb-3">
+                                <input type="number" name="max_price" class="form-control"
+                                    placeholder="Max price"
+                                    min="0"
+                                    t-att-value="request.params.get('max_price')"/>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">
+                                Filter
+                            </button>
+
+                        </form>
+                    </div>
+
+                    <!-- ✅ CARS RIGHT -->
+                    <div class="col-md-9">
+
+                        <h1>Cars</h1>
+
+                        <div class="row">
+                            <t t-foreach="cars" t-as="car">
+                                <div class="col-md-4 mb-3">
+                                    <div class="card h-100">
+
+                                        <img t-att-src="'/web/image/cars.car/' + str(car.id) + '/image'"
+                                            class="card-img-top"/>
+
+                                        <div class="card-body">
+                                            <h5>
+                                                <a t-att-href="'/cars/' + str(car.id)">
+                                                    <t t-esc="car.brand +' '+ car.name"/>
+                                                </a>
+                                            </h5>
+                                            <p>Brand: <t t-esc="car.brand"/></p>
+                                            <p>Price: <t t-esc="car.price"/> MAD</p>
+                                        </div>
+
+                                        <div class="card-footer bg-white border-0">
+                                            <a t-att-href="'/contact?car_id=' + str(car.id)"
+                                            class="btn btn-success w-100">
+                                                Interested
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </t>
+    </template>
+
+    <!-- ===================== DETAIL PAGE ===================== -->
+    <template id="car_detail_template" name="Car Detail">
+        <t t-call="website.layout">
+
+            <div class="container mt-4">
+
+                <h1><t t-esc="car.brand +' '+ car.name"/></h1>
+
+                <div class="row mt-3">
+
+                    <div class="col-md-6">
+
+                        <!-- IMAGE PRINCIPALE -->
+                        <img t-att-src="'/web/image/cars.car/' + str(car.id) + '/image'"
+                             class="img-fluid"/>
+      
+                        <!-- GALLERY -->
+                        <div class="d-flex flex-wrap gap-2">
+                            <t t-foreach="car.image_ids" t-as="img">
+                                <img t-att-src="'/web/image/cars.car.image/' + str(img.id) + '/image'"
+                                    style="width: 150px; height: 150px; object-fit: cover; cursor: pointer;"
+                                    class="border"/>
+                            </t>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <p><b>Brand:</b> <t t-esc="car.brand"/></p>
+                        <p><b>Name:</b> <t t-esc="car.name"/></p>
+                        <p><b>Country:</b> <t t-esc="dict(car._fields['brand_country'].selection).get(car.brand_country)"/> </p>
+                        <p><b>Body type:</b> <t t-esc="car.body_type"/></p>
+                        <p><b>Fuel type:</b> <t t-esc="car.fuel_type"/></p>
+                        <p><b>Model year:</b> <t t-esc="car.model_year"/> </p>
+                        <p><b>Color:</b> <t t-esc="car.color"/> </p>
+                        <p><b>Distance:</b> <t t-esc="car.distance"/> </p>
+                        <p><b>Number of cylinders:</b> <t t-esc="car.cylinders"/> </p>
+                        <p><b>Price:</b> <t t-esc="car.price"/> MAD</p>
+                    </div>
+
+                    <a t-att-href="'/contact?car_id=' + str(car.id)"
+                       class="btn btn-success">
+                        Interested
+                    </a>
+
+                </div>
+
+            </div>
+
+        </t>
+    </template>
+
+    <!-- ===================== CONTACT PAGE ===================== -->
+    <template id="contact_template" name="Contact Page">
+        <t t-call="website.layout">
+
+            <div class="container mt-5">
+                <h1>Contact Us</h1>
+
+                <form action="/contact/submit" method="post">
+                    <input type="hidden" name="car_id" t-att-value="car and car.id or ''"/>
+                    <t t-if="car">
+
+                        <div class="alert alert-info">
+                            <h4>Car selected:</h4>
+
+                            <!-- IMAGE FIXED -->
+                            <img t-att-src="'/web/image/cars.car/' + str(car.id) + '/image'"
+                                 class="img-fluid mb-3"
+                                 style="max-width: 200px;"/>
+
+                            <p><t t-esc="car.name"/></p>
+                            <p><t t-esc="car.price"/> MAD</p>
+                        </div>
+
+                    </t>
+
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" name="name" class="form-control"/>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label>Email</label>
+                        <input type="email" name="email" class="form-control"/>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label>Phone Number</label>
+                        <input type="text" name="phone" class="form-control"/>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label>Message</label>
+                        <textarea name="message" class="form-control"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-3">
+                        Send
+                    </button>
+
+                </form>
+
+            </div>
+
+        </t>
+    </template>
+
+</odoo>

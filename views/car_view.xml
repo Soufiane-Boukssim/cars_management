@@ -1,0 +1,86 @@
+<odoo>
+
+    <!-- LIST VIEW -->
+    <record id="view_car_list" model="ir.ui.view">
+        <field name="name">cars.car.list</field>
+        <field name="model">cars.car</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="image" widget="image" class="oe_avatar" options="{'size': [40, 40]}" />
+                <field name="name"/>
+                <field name="brand"/>
+                <field name="model_year"/>
+                <field name="price"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- FORM VIEW -->
+    <record id="view_car_form" model="ir.ui.view">
+        <field name="name">cars.car.form</field>
+        <field name="model">cars.car</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+
+                    <group col="3">
+                        <group>
+                            <field name="name"/>
+                            <field name="brand"/>
+                            <field name="brand_country"/>
+                            <field name="model_year"/>
+                            <field name="color"/>
+                            <field name="price"/>
+                        </group>
+
+                        <group>
+                            <field name="body_type" widget="radio"/>
+                            <field name="fuel_type" widget="radio"/>
+                        </group>
+
+                        <!-- RIGHT SIDE (MAIN IMAGE) -->
+                        <group>
+                            <field name="image" widget="image" class="oe_avatar"/>  
+                        </group>
+
+                    </group>
+
+                    <group>
+                        <field name="feature_ids" widget="many2many_tags"/>
+                    </group>
+
+                    <notebook>
+
+                        <page string="History">
+                            <group>
+                                <field name="distance"/>
+                                <field name="owners_count"/>
+                                <field name="cylinders"/>
+                                <field name="is_damaged" widget="boolean_toggle"/>
+                            </group>
+                        </page>
+
+                        <page string="Images">
+                            <field name="image_ids">
+                                <kanban class="o_kanban_small_column">
+                                    <templates>
+                                        <t t-name="card">
+                                            <div class="o_kanban_record">
+                                                <div class="o_kanban_image">
+                                                    <field name="image" widget="image"/>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                            </field>
+                        </page>
+
+                    </notebook>
+
+                </sheet>
+            </form>        
+        </field>
+    </record>
+
+</odoo>

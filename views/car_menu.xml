@@ -1,0 +1,16 @@
+<odoo>
+
+    <!-- MENU -->
+    <menuitem 
+        id="menu_car_root" 
+        name="Cars"
+    />
+
+    <menuitem 
+        id="menu_car" 
+        name="Cars List"
+        parent="menu_car_root"
+        action="action_car"
+    />
+
+</odoo>
