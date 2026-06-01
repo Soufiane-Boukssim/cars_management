@@ -3,3 +3,4 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_car_user,cars.car user,model_cars_car,base.group_user,1,1,1,1
 access_car_feature_user,cars.car.feature user,model_cars_car_feature,base.group_user,1,1,1,1
 access_car_image_user,cars.car.image user,model_cars_car_image,base.group_user,1,1,1,1
+access_car_sell_wizard,access.car.sell.wizard,model_car_sell_wizard,,1,1,1,1

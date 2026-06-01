@@ -83,22 +83,85 @@ class CarWebsite(http.Controller):
                 car_name = car.name
 
         body_html = f"""
-            <div>
-                <h3>New Car Request</h3>
+            
+            <div style="margin:0; padding:0; background-color:#f4f6f8; font-family:Arial, sans-serif;">
 
-                <p><b>Name:</b> {name}</p>
-                <p><b>Email:</b> {email}</p>
-                <p><b>Phone:</b> {phone}</p>
-                <p><b>Car:</b> {car_name}</p>
-                <p><b>Message:</b><br/>{message}</p>
+                <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f6f8; padding:20px 0;">
+                    <tr>
+                    <td align="center">
+
+                ```
+                    <!-- Card -->
+                    <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff; border-radius:10px; overflow:hidden; box-shadow:0 4px 10px rgba(0,0,0,0.08);">
+
+                    <!-- Header -->
+                    <tr>
+                        <td style="background:#0d47a1; padding:20px; color:white;">
+                        <h2 style="margin:0; font-size:20px;"> New Car Request</h2>
+                        <p style="margin:5px 0 0; font-size:13px; opacity:0.8;">A new customer submitted a request</p>
+                        </td>
+                    </tr>
+
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding:20px;">
+
+                            <!-- Info Table -->
+                            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px;">
+                                <tr>
+                                <td style="padding:10px; font-weight:bold; color:#555;">Name</td>
+                                <td style="padding:10px;">{name}</td>
+                                </tr>
+                                <tr style="background:#f9fafb;">
+                                <td style="padding:10px; font-weight:bold; color:#555;">Email</td>
+                                <td style="padding:10px;">{email}</td>
+                                </tr>
+                                <tr>
+                                <td style="padding:10px; font-weight:bold; color:#555;">Phone</td>
+                                <td style="padding:10px;">{phone}</td>
+                                </tr>
+                                <tr style="background:#f9fafb;">
+                                <td style="padding:10px; font-weight:bold; color:#555;">Car</td>
+                                <td style="padding:10px;">{car_name}</td>
+                                </tr>
+                            </table>
+
+                            <!-- Message -->
+                            <div style="margin-top:20px;">
+                                <p style="margin-bottom:8px; font-weight:bold; color:#333;">Message</p>
+                                <div style="background:#f1f5f9; padding:12px; border-radius:6px; color:#444; line-height:1.5;">
+                                {message}
+                                </div>
+                            </div>
+
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background:#f9fafb; padding:15px; text-align:center; font-size:12px; color:#888;">
+                        Sent from your website • Car Request System
+                        </td>
+                    </tr>
+
+                    </table>
+
+                    </td>
+                </tr>
+                ```
+
+                </table>
+
             </div>
+
+
         """
 
         mail = request.env['mail.mail'].sudo().create({
             'subject': f"New Car Request: {car_name}",
             'body_html': body_html,
-            'email_to': email,
-            'email_from': "no-reply@test.com",
+            'email_to': f"{email},soufianeboukssim41@gmail.com",
+            'email_from': "sfn@test.com",
         })
 
         mail.send()

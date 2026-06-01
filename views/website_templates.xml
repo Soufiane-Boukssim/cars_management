@@ -5,7 +5,7 @@
         <t t-call="website.layout">
 
             <div class="container mt-5 text-center">
-                <h1>🚗 Welcome to Car Marketplace</h1>
+                <h1>Welcome to Car Marketplace</h1>
                 <p>Buy cars easy</p>
 
                 <a href="/cars" class="btn btn-primary">
@@ -14,24 +14,24 @@
             </div>
 
             <div class="container mt-5">
-                <h2>🔥 Featured Cars</h2>
+                <h2>Featured Cars</h2>
 
                 <div class="row">
                     <t t-foreach="cars" t-as="car">
                         <div class="col-md-4">
                             <div class="card mb-3">
 
-                                <!-- IMAGE FIXED -->
                                 <img t-att-src="'/web/image/cars.car/' + str(car.id) + '/image'"
                                      class="card-img-top"/>
 
                                 <div class="card-body">
                                     <h5>
                                         <a t-att-href="'/cars/' + str(car.id)">
-                                            <t t-esc="car.brand +' '+ car.name"/>
+                                            <!-- FIX: brand is Char, returns False when empty -->
+                                            <t t-esc="(car.brand or '') + ' ' + (car.name or '')"/>
                                         </a>
                                     </h5>
-                                    <p><t t-esc="car.price"/> MAD</p>
+                                    <p><t t-esc="car.price"/> $</p>
                                 </div>
 
                                 <a t-att-href="'/contact?car_id=' + str(car.id)"
@@ -56,7 +56,7 @@
             <div class="container mt-4">
                 <div class="row">
 
-                    <!-- ✅ FILTER LEFT -->
+                    <!-- FILTER LEFT -->
                     <div class="col-md-3">
                         <form method="get" action="/cars" class="mb-4">
 
@@ -91,7 +91,7 @@
                         </form>
                     </div>
 
-                    <!-- ✅ CARS RIGHT -->
+                    <!-- CARS RIGHT -->
                     <div class="col-md-9">
 
                         <h1>Cars</h1>
@@ -107,11 +107,12 @@
                                         <div class="card-body">
                                             <h5>
                                                 <a t-att-href="'/cars/' + str(car.id)">
-                                                    <t t-esc="car.brand +' '+ car.name"/>
+                                                    <!-- FIX: brand is Char, returns False when empty -->
+                                                    <t t-esc="(car.brand or '') + ' ' + (car.name or '')"/>
                                                 </a>
                                             </h5>
-                                            <p>Brand: <t t-esc="car.brand"/></p>
-                                            <p>Price: <t t-esc="car.price"/> MAD</p>
+                                            <p>Brand: <t t-esc="car.brand or 'N/A'"/></p>
+                                            <p>Price: <t t-esc="car.price"/> $</p>
                                         </div>
 
                                         <div class="card-footer bg-white border-0">
@@ -140,7 +141,8 @@
 
             <div class="container mt-4">
 
-                <h1><t t-esc="car.brand +' '+ car.name"/></h1>
+                <!-- FIX: brand is Char, returns False when empty -->
+                <h1><t t-esc="(car.brand or '') + ' ' + (car.name or '')"/></h1>
 
                 <div class="row mt-3">
 
@@ -149,7 +151,7 @@
                         <!-- IMAGE PRINCIPALE -->
                         <img t-att-src="'/web/image/cars.car/' + str(car.id) + '/image'"
                              class="img-fluid"/>
-      
+
                         <!-- GALLERY -->
                         <div class="d-flex flex-wrap gap-2">
                             <t t-foreach="car.image_ids" t-as="img">
@@ -162,20 +164,20 @@
                     </div>
 
                     <div class="col-md-6">
-                        <p><b>Brand:</b> <t t-esc="car.brand"/></p>
+                        <p><b>Brand:</b> <t t-esc="car.brand or 'N/A'"/></p>
                         <p><b>Name:</b> <t t-esc="car.name"/></p>
-                        <p><b>Country:</b> <t t-esc="dict(car._fields['brand_country'].selection).get(car.brand_country)"/> </p>
-                        <p><b>Body type:</b> <t t-esc="car.body_type"/></p>
-                        <p><b>Fuel type:</b> <t t-esc="car.fuel_type"/></p>
-                        <p><b>Model year:</b> <t t-esc="car.model_year"/> </p>
-                        <p><b>Color:</b> <t t-esc="car.color"/> </p>
-                        <p><b>Distance:</b> <t t-esc="car.distance"/> </p>
-                        <p><b>Number of cylinders:</b> <t t-esc="car.cylinders"/> </p>
-                        <p><b>Price:</b> <t t-esc="car.price"/> MAD</p>
+                        <p><b>Country:</b> <t t-esc="dict(car._fields['brand_country'].selection).get(car.brand_country, 'N/A')"/></p>
+                        <p><b>Body type:</b> <t t-esc="car.body_type or 'N/A'"/></p>
+                        <p><b>Fuel type:</b> <t t-esc="car.fuel_type or 'N/A'"/></p>
+                        <p><b>Model year:</b> <t t-esc="car.model_year or 'N/A'"/></p>
+                        <p><b>Color:</b> <t t-esc="car.color or 'N/A'"/></p>
+                        <p><b>Distance:</b> <t t-esc="car.distance"/> km</p>
+                        <p><b>Number of cylinders:</b> <t t-esc="car.cylinders"/></p>
+                        <p><b>Price:</b> <t t-esc="car.price"/> $</p>
                     </div>
 
                     <a t-att-href="'/contact?car_id=' + str(car.id)"
-                       class="btn btn-success">
+                       class="btn btn-success mt-3">
                         Interested
                     </a>
 
@@ -200,13 +202,12 @@
                         <div class="alert alert-info">
                             <h4>Car selected:</h4>
 
-                            <!-- IMAGE FIXED -->
                             <img t-att-src="'/web/image/cars.car/' + str(car.id) + '/image'"
                                  class="img-fluid mb-3"
                                  style="max-width: 200px;"/>
 
                             <p><t t-esc="car.name"/></p>
-                            <p><t t-esc="car.price"/> MAD</p>
+                            <p><t t-esc="car.price"/> $</p>
                         </div>
 
                     </t>
