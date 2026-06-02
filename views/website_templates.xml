@@ -11,6 +11,11 @@
                 <a href="/cars" class="btn btn-primary">
                     Find Your Car
                 </a>
+
+                <a href="/cars/export/pdf" class="btn btn-danger ms-2">
+                    Download Available Cars (PDF)
+                </a>
+
             </div>
 
             <div class="container mt-5">
@@ -34,10 +39,18 @@
                                     <p><t t-esc="car.price"/> $</p>
                                 </div>
 
-                                <a t-att-href="'/contact?car_id=' + str(car.id)"
-                                   class="btn btn-success mt-3">
-                                    Interested
-                                </a>
+                                <t t-if="not car.has_accepted_lead">
+                                    <a t-att-href="'/contact?car_id=' + str(car.id)"
+                                    class="btn btn-success mt-3">
+                                        Interested
+                                    </a>
+                                </t>
+                                <t t-else="">
+                                    <span class="btn btn-secondary mt-3 disabled"
+                                        style="pointer-events: none; opacity: 0.6;">
+                                        Not existed
+                                    </span>
+                                </t>
 
                             </div>
                         </div>
@@ -116,10 +129,18 @@
                                         </div>
 
                                         <div class="card-footer bg-white border-0">
-                                            <a t-att-href="'/contact?car_id=' + str(car.id)"
-                                            class="btn btn-success w-100">
-                                                Interested
-                                            </a>
+                                            <t t-if="not car.has_accepted_lead">
+                                                <a t-att-href="'/contact?car_id=' + str(car.id)"
+                                                class="btn btn-success w-100">
+                                                    Interested
+                                                </a>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="btn btn-secondary mt-3 disabled"
+                                                    style="pointer-events: none; opacity: 0.6;">
+                                                    Not existed
+                                                </span>
+                                            </t>
                                         </div>
 
                                     </div>
@@ -176,10 +197,18 @@
                         <p><b>Price:</b> <t t-esc="car.price"/> $</p>
                     </div>
 
-                    <a t-att-href="'/contact?car_id=' + str(car.id)"
-                       class="btn btn-success mt-3">
-                        Interested
-                    </a>
+                    <t t-if="not car.has_accepted_lead">
+                        <a t-att-href="'/contact?car_id=' + str(car.id)"
+                        class="btn btn-success mt-3">
+                            Interested
+                        </a>
+                    </t>
+                    <t t-else="">
+                        <span class="btn btn-secondary mt-3 disabled"
+                            style="pointer-events: none; opacity: 0.6;">
+                            Not existed
+                        </span>
+                    </t>
 
                 </div>
 

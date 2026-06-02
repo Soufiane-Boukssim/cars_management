@@ -53,4 +53,5 @@ class CarSellWizard(models.TransientModel):
             'phone': self.phone,
             'description': self.message,
             'stage_id': stage.id if stage else False,
+            'car_id': car.id,
         })

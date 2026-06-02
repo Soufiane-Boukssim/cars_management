@@ -1,7 +1,7 @@
 {
     'name': 'Cars Management',
     'version': '1.0',
-    'depends': ['base'],
+    'depends': ['base', 'crm'],
     'data': [
         'security/ir.model.access.csv',
         'data/car_feature_data.xml',

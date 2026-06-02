@@ -103,3 +103,33 @@ class Car(models.Model):
 
     def action_confirm(self):
         return True
+    
+    has_accepted_lead = fields.Boolean(
+        compute='_compute_has_accepted_lead',
+        store=False
+    )
+
+
+    def _compute_has_accepted_lead(self):
+        stage = self.env['crm.stage'].sudo().search([
+            ('name', '=', 'Accepted')
+        ], limit=1)
+
+        if not stage:
+            for car in self:
+                car.has_accepted_lead = False
+            return
+
+        lead_map = {}
+
+        leads = self.env['crm.lead'].sudo().search([
+            ('car_id', 'in', self.ids),
+            ('stage_id', '=', stage.id)
+        ])
+
+        for lead in leads:
+            lead_map[lead.car_id.id] = True
+
+        for car in self:
+            car.has_accepted_lead = lead_map.get(car.id, False)
+

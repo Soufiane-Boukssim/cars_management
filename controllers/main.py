@@ -1,5 +1,12 @@
+import io
+import base64
 from odoo import http
-from odoo.http import request
+from odoo.http import request, Response
+from reportlab.lib.pagesizes import A4
+from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image as RLImage
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.units import cm
 
 
 class CarWebsite(http.Controller):
@@ -35,7 +42,7 @@ class CarWebsite(http.Controller):
         if kwargs.get('max_price'):
             domain.append(('price', '<=', float(kwargs.get('max_price'))))
 
-        cars = request.env['cars.car'].search(domain)
+        cars = request.env['cars.car'].sudo().search(domain)
 
         return request.render('cars_management.car_list_template', {
             'cars': cars
@@ -174,6 +181,96 @@ class CarWebsite(http.Controller):
             'email_from': email,
             'phone': phone,
             'description': message,
+            'car_id': car.id if car else False,
         })
 
         return request.redirect('/')
+    
+
+    @http.route('/cars/export/pdf', auth='public', website=True, type='http')
+    def export_cars_pdf(self, **kw):
+
+        # Voitures sans lead "Accepted"
+        stage = request.env['crm.stage'].sudo().search([('name', '=', 'Accepted')], limit=1)
+
+        if stage:
+            accepted_car_ids = request.env['crm.lead'].sudo().search([
+                ('stage_id', '=', stage.id),
+                ('car_id', '!=', False),
+            ]).mapped('car_id.id')
+
+            cars = request.env['cars.car'].sudo().search([
+                ('id', 'not in', accepted_car_ids)
+            ])
+        else:
+            cars = request.env['cars.car'].sudo().search([])
+
+        # Générer le PDF
+        buffer = io.BytesIO()
+        doc = SimpleDocTemplate(buffer, pagesize=A4, leftMargin=1*cm, rightMargin=1*cm)
+        styles = getSampleStyleSheet()
+        story = []
+
+        # Titre
+        story.append(Paragraph("Available Cars", styles['Title']))
+        story.append(Spacer(1, 20))
+
+        # En-têtes
+        data = [['Image', 'Brand', 'Name', 'Body Type', 'Fuel', 'Year', 'Color', 'Price ($)']]
+
+        for car in cars:
+            # ✅ Image: décoder le base64 stocké dans Odoo
+            if car.image:
+                try:
+                    img_data = base64.b64decode(car.image)
+                    img_buffer = io.BytesIO(img_data)
+                    img = RLImage(img_buffer, width=2.5*cm, height=2*cm)
+                except Exception:
+                    img = Paragraph('No image', styles['Normal'])
+            else:
+                img = Paragraph('No image', styles['Normal'])
+
+            data.append([
+                img,
+                car.brand or 'N/A',
+                car.name or 'N/A',
+                car.body_type or 'N/A',
+                car.fuel_type or 'N/A',
+                str(car.model_year) if car.model_year else 'N/A',
+                car.color or 'N/A',
+                str(car.price),
+            ])
+
+        col_widths = [3*cm, 2.5*cm, 3.5*cm, 2.5*cm, 2*cm, 1.8*cm, 2*cm, 2.2*cm]
+
+        table = Table(data, colWidths=col_widths, repeatRows=1)
+        table.setStyle(TableStyle([
+            ('BACKGROUND',    (0, 0), (-1, 0),  colors.HexColor('#0d47a1')),
+            ('TEXTCOLOR',     (0, 0), (-1, 0),  colors.white),
+            ('FONTNAME',      (0, 0), (-1, 0),  'Helvetica-Bold'),
+            ('FONTSIZE',      (0, 0), (-1, 0),  10),
+            ('ROWBACKGROUNDS',(0, 1), (-1, -1), [colors.white, colors.HexColor('#f1f5f9')]),
+            ('FONTSIZE',      (0, 1), (-1, -1), 8),
+            ('GRID',          (0, 0), (-1, -1), 0.5, colors.HexColor('#cccccc')),
+            ('ALIGN',         (0, 0), (-1, -1), 'CENTER'),
+            ('VALIGN',        (0, 0), (-1, -1), 'MIDDLE'),
+            ('PADDING',       (0, 0), (-1, -1), 5),
+            # Hauteur de ligne pour les images
+            ('ROWHEIGHT',     (0, 1), (-1, -1), 2.2*cm),
+        ]))
+
+        story.append(table)
+        doc.build(story)
+
+        pdf_bytes = buffer.getvalue()
+        buffer.close()
+
+        return Response(
+            pdf_bytes,
+            content_type='application/pdf',
+            headers={
+                'Content-Disposition': 'attachment; filename="available_cars.pdf"',
+                'Content-Length': str(len(pdf_bytes)),
+            }
+        )
+
