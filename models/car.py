@@ -89,6 +89,9 @@ class Car(models.Model):
         string="Status"
     )
 
+    date_start = fields.Datetime(string="Start Date")
+    date_end = fields.Datetime(string="End Date")
+
     def action_sell(self):
         return {
             'type': 'ir.actions.act_window',

@@ -43,6 +43,8 @@
                             <field name="model_year"/>
                             <field name="color"/>
                             <field name="price"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
                         </group>
 
                         <group>
@@ -122,4 +124,42 @@
         </field>
     </record>
 
+    <!-- vue calendrier -->
+    <record id="view_car_calendar" model="ir.ui.view">
+        <field name="name">cars.car.calendar</field>
+        <field name="model">cars.car</field>
+        <field name="arch" type="xml">
+            <calendar string="Car Calendar"
+                    date_start="date_start"
+                    date_stop="date_end"
+                    mode="month"
+                    color="name">
+                <field name="name"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- PIVOT VIEW -->
+    <record id="view_car_pivot" model="ir.ui.view">
+        <field name="name">cars.car.pivot</field>
+        <field name="model">cars.car</field>
+        <field name="arch" type="xml">
+            <pivot string="Car Analysis">
+
+                <!-- MESURES -->
+                <field name="price" type="measure"/>
+                <field name="distance" type="measure"/>
+                <field name="owners_count" type="measure"/>
+
+                <!-- LIGNES -->
+                <field name="brand" type="row"/>
+                <field name="state" type="row"/>
+
+                <!-- COLONNES -->
+                <field name="date_start" interval="month" type="col"/>
+
+            </pivot>
+        </field>
+    </record>
+    
 </odoo>
