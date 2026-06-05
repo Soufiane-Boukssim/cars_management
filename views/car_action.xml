@@ -1,10 +1,17 @@
 <odoo>
 
-    <!-- ACTION -->
     <record id="action_car" model="ir.actions.act_window">
         <field name="name">Cars</field>
         <field name="res_model">cars.car</field>
         <field name="view_mode">list,form</field>
+        <field name="context">{}</field>
     </record>
 
+    <!-- Action URL directe -->
+    <record id="action_export_pdf_url" model="ir.actions.act_url">
+        <field name="name">Export Cars PDF</field>
+        <field name="url">/cars/export/pdf</field>
+        <field name="target">new</field>
+    </record>
+    
 </odoo>

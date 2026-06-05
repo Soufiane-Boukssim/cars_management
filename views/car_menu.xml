@@ -13,4 +13,10 @@
         action="action_car"
     />
 
+    <menuitem id="menu_export_pdf"
+          name="Export PDF"
+          parent="menu_car_root"
+          action="action_export_pdf_url"
+          sequence="20"/>
+
 </odoo>

@@ -133,3 +133,9 @@ class Car(models.Model):
         for car in self:
             car.has_accepted_lead = lead_map.get(car.id, False)
 
+    def action_export_pdf(self):
+        return {
+            'type': 'ir.actions.act_url',
+            'url': '/cars/export/pdf',
+            'target': 'new',
+        }
