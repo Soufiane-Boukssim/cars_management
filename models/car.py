@@ -4,7 +4,7 @@ from odoo import models, fields
 class Car(models.Model):
     _name = 'cars.car'
     _description = 'Car'
-
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     name = fields.Char(string="Car Name", required=True)
 
     # FIX: default='' prevents False being returned when field is empty
@@ -86,7 +86,8 @@ class Car(models.Model):
             ('sold', 'Sold'),
         ],
         default='available',
-        string="Status"
+        string="Status",
+        tracking=True
     )
 
     date_start = fields.Datetime(string="Start Date")
