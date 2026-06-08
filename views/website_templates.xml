@@ -39,7 +39,7 @@
                                     <p><t t-esc="car.price"/> $</p>
                                 </div>
 
-                                <t t-if="not car.has_accepted_lead">
+                                <t t-if="not car.has_accepted_lead and car.state == 'available'">
                                     <a t-att-href="'/contact?car_id=' + str(car.id)"
                                     class="btn btn-success mt-3">
                                         Interested
@@ -129,7 +129,7 @@
                                         </div>
 
                                         <div class="card-footer bg-white border-0">
-                                            <t t-if="not car.has_accepted_lead">
+                                            <t t-if="not car.has_accepted_lead and car.state == 'available'">
                                                 <a t-att-href="'/contact?car_id=' + str(car.id)"
                                                 class="btn btn-success w-100">
                                                     Interested
@@ -197,7 +197,7 @@
                         <p><b>Price:</b> <t t-esc="car.price"/> $</p>
                     </div>
 
-                    <t t-if="not car.has_accepted_lead">
+                    <t t-if="not car.has_accepted_lead and car.state == 'available'">
                         <a t-att-href="'/contact?car_id=' + str(car.id)"
                         class="btn btn-success mt-3">
                             Interested

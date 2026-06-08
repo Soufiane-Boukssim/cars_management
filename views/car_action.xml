@@ -13,5 +13,27 @@
         <field name="url">/cars/export/pdf</field>
         <field name="target">new</field>
     </record>
+
+    <record id="action_car_set_available" model="ir.actions.server">
+        <field name="name">Mark as Available</field>
+        <field name="model_id" ref="model_cars_car"/>
+        <field name="binding_model_id" ref="model_cars_car"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+            records.write({'state': 'available'})
+        </field>
+    </record>
     
+    <record id="action_car_set_sold" model="ir.actions.server">
+        <field name="name">Mark as Sold</field>
+        <field name="model_id" ref="model_cars_car"/>
+        <field name="binding_model_id" ref="model_cars_car"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+            records.write({'state': 'sold'})
+        </field>
+    </record>
+
 </odoo>
