@@ -92,6 +92,38 @@ class Car(models.Model):
     date_start = fields.Datetime(string="Start Date")
     date_end = fields.Datetime(string="End Date")
 
+    lead_count = fields.Integer(compute="_compute_lead_count")
+
+    def _compute_lead_count(self):
+        stage = self.env['crm.stage'].sudo().search([
+            ('name', '=', 'Accepted')
+        ], limit=1)
+
+        leads = self.env['crm.lead'].sudo().search([
+            ('car_id', 'in', self.ids)
+        ])
+
+        grouped = {}
+        accepted_grouped = {}
+
+        for lead in leads:
+            grouped[lead.car_id.id] = grouped.get(lead.car_id.id, 0) + 1
+
+            if stage and lead.stage_id.id == stage.id:
+                accepted_grouped[lead.car_id.id] = accepted_grouped.get(lead.car_id.id, 0) + 1
+
+        for car in self:
+            car.lead_count = grouped.get(car.id, 0)
+
+    def action_view_leads(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Leads',
+            'res_model': 'crm.lead',
+            'view_mode': 'list,form',
+            'domain': [('car_id', '=', self.id)],
+        }
+
     def action_sell(self):
         return {
             'type': 'ir.actions.act_window',

@@ -35,6 +35,16 @@
                 </header>
                 <sheet>
 
+                    <!-- SMART BUTTON LEADS -->
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_leads"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-users">
+                            <field name="lead_count" widget="statinfo" string="Leads"/>
+                        </button>
+                    </div>
+
                     <group col="3">
                         <group>
                             <field name="name"/>
