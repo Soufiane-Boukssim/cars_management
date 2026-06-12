@@ -9,6 +9,7 @@
         'views/car_action.xml',
         'views/car_menu.xml',
         'views/website_templates.xml',
+        'data/cron.xml',
     ],
     'installable': True,
 }

@@ -1,0 +1,11 @@
+<odoo>
+    <record id="ir_cron_delete_old_leads" model="ir.cron">
+        <field name="name">Delete Old Leads (10 min)</field>
+        <field name="model_id" ref="model_cars_car"/>
+        <field name="state">code</field>
+        <field name="code">model.delete_old_leads()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">minutes</field>
+        <field name="active">True</field>
+    </record>
+</odoo>

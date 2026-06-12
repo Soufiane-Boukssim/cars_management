@@ -1,5 +1,5 @@
-from odoo import models, fields
-
+from odoo import models, fields, api
+from datetime import timedelta
 
 class Car(models.Model):
     _name = 'cars.car'
@@ -175,3 +175,14 @@ class Car(models.Model):
             'url': '/cars/export/pdf',
             'target': 'new',
         }
+
+    @api.model
+    def delete_old_leads(self):
+        limit_time = fields.Datetime.now() - timedelta(minutes=1)
+        leads = self.env['crm.lead'].search(
+            [
+                ('create_date', '<', limit_time),
+                ('active', '=', True)
+            ]
+        )
+        leads.write({'active': False})
