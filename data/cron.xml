@@ -4,7 +4,7 @@
         <field name="model_id" ref="model_cars_car"/>
         <field name="state">code</field>
         <field name="code">model.delete_old_leads()</field>
-        <field name="interval_number">1</field>
+        <field name="interval_number">10</field>
         <field name="interval_type">minutes</field>
         <field name="active">True</field>
     </record>

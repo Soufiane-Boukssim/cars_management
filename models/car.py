@@ -90,6 +90,12 @@ class Car(models.Model):
         tracking=True
     )
 
+    command_ids = fields.One2many(
+        'cars.car.command',
+        'car_id',
+        string="Commands"
+    )
+
     date_start = fields.Datetime(string="Start Date")
     date_end = fields.Datetime(string="End Date")
 
@@ -186,3 +192,37 @@ class Car(models.Model):
             ]
         )
         leads.write({'active': False})
+
+    total_product_count = fields.Integer(compute="_compute_total_products")
+
+    @api.depends('command_ids.line_ids')
+    def _compute_total_products(self):
+        for car in self:
+            print("CAR:", car.name)
+            print("COMMAND IDS:", car.command_ids)
+            car.total_product_count = sum(cmd.quantity for cmd in car.command_ids)
+
+
+    total_car_requested = fields.Integer(compute="_compute_total_car_requested")
+    def _compute_total_car_requested(self):
+        for car in self:
+            car.total_car_requested = sum(
+                cmd.quantity for cmd in car.command_ids
+            )
+
+    orders_ids = fields.One2many(
+        'cars.car.order',
+        'car_id',
+        string="Orders"
+    )
+
+    total_quantity = fields.Integer(
+        string="Total Quantity",
+        compute="_compute_total_quantity",
+        store=True
+    )
+
+    @api.depends('orders_ids.quantity')
+    def _compute_total_quantity(self):
+        for rec in self:
+            rec.total_quantity = sum(rec.orders_ids.mapped('quantity'))

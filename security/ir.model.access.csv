@@ -4,3 +4,6 @@ access_car_user,cars.car user,model_cars_car,base.group_user,1,1,1,1
 access_car_feature_user,cars.car.feature user,model_cars_car_feature,base.group_user,1,1,1,1
 access_car_image_user,cars.car.image user,model_cars_car_image,base.group_user,1,1,1,1
 access_car_sell_wizard,access.car.sell.wizard,model_car_sell_wizard,,1,1,1,1
+access_car_command_user,access.car.command.user,model_cars_car_command,,1,1,1,1
+access_car_command_line_user,access.car.command.line.user,model_cars_car_command_line,base.group_user,1,1,1,0
+access_car_order_user,access.car.order.user,model_cars_car_order,,1,1,1,1

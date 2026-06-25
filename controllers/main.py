@@ -184,6 +184,30 @@ class CarWebsite(http.Controller):
             'car_id': car.id if car else False,
         })
 
+        if car:
+            quantity = int(post.get('quantity', 1))
+            lead = request.env['crm.lead'].sudo().create({
+                'name': "Website Car Request",
+                'contact_name': post.get('name'),
+                'email_from': post.get('email'),
+                'phone': post.get('phone'),
+                'description': message or "Website request",
+            })
+            command= request.env['cars.car.command'].sudo().create({
+                'car_id': car.id,
+                'description': message or "Website request",
+                'quantity': quantity,
+            })
+            request.env['cars.car.command.line'].sudo().create({
+                    'command_id': command.id,
+                    'product_name': "Website request",
+                    'quantity': 1,
+                })
+            request.env['cars.car.order'].sudo().create({
+                    'car_id': car.id,
+                    'lead_id': lead.id,
+                    'quantity': quantity,
+                })
         return request.redirect('/')
     
 

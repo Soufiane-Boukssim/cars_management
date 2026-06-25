@@ -5,4 +5,4 @@ class CrmLead(models.Model):
 
     car_id = fields.Many2one('cars.car', string="Car")
 
-    
+    car_id = fields.Many2one('cars.car')
